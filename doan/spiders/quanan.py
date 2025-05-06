@@ -6,12 +6,13 @@ from scrapy import Selector
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 import time
-class ShopeeSpider(scrapy.Spider):
-    name = "shopee"
+
+class QuananSpider(scrapy.Spider):
+    name = "quanan"
     allowed_domains = ["shopeefood.vn"]
     start_urls = ["https://shopeefood.vn/ho-chi-minh/food/deals"]
     max_page = 5
-    id = 1
+    id = 0
 
     def start_requests(self):
         url = "https://shopeefood.vn/ho-chi-minh/food/deals"
@@ -47,10 +48,12 @@ class ShopeeSpider(scrapy.Spider):
                 wait_until=EC.presence_of_element_located((By.CLASS_NAME, "item-restaurant-name")),
                 wait_time=30
             )
+            
     def parse_chitiet(self, response):
-        idquan = self.id
+        id = self.id
 
-        self.id += 1
+        self.id +=1
+        tenquan = response.css("h1.name-restaurant::text").get()
         diachi = response.css("div.address-restaurant::text").get()
         stars = response.css("div.stars > span").getall()
         score = 0
@@ -65,43 +68,10 @@ class ShopeeSpider(scrapy.Spider):
                 score += 0.5
             elif class_name == "empty":
                 score += 0
-        driver = response.meta['driver']
-
-        last_scroll_position = 0
-        scroll_step = 200
-        max_scrolls = 100
-        scrolls = 0
-        items = set()
-        prices = set()
-        while True:
-            page_source  = driver.page_source
-            sel = Selector(text=page_source)
-
-            item = sel.css("h2.item-restaurant-name::text").getall()
-            price = sel.css("div.current-price::text").getall()
-            
-            for i, p in zip(item, price):
-                items.add((i.strip(), p.strip()))
-            driver.execute_script(f"window.scrollBy(0, {scroll_step});")
-            time.sleep(0.5)
-            current_scroll_position = driver.execute_script("return window.pageYOffset + window.innerHeight")
-            total_height = driver.execute_script("return document.body.scrollHeight")
-            
-            if current_scroll_position >= total_height-300:
-                break
-
-            # Safety check
-            scrolls += 1
-            if scrolls > max_scrolls:
-                break
         
-        for item, price in items:
-            yield{
-                'idquan' : idquan,
-                'rating' : score,
-                'item' : item,
-                'price' : price.replace('.',''),
-            }
-
-
-
+        yield{
+            'id' : id,
+            'tenquan' : tenquan,
+            'diachi' : diachi,
+            'rating' : score,
+        }
