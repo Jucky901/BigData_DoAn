@@ -59,20 +59,70 @@ def parse_sqoop_output(output):
     return df
 
 # Streamlit user interface
-st.title("Sqoop Eval Output")
+st.title("Quan an")
 
-# Add search bar and capture input
-search_query = st.text_input("Search by Restaurant Name", "")
+# Separate search bars for Restaurant Name and Address
+search_tenquan = st.text_input("Search by Restaurant Name", "")
+search_diachi = st.text_input("Search by Address", "")
 
-# Default query, if no search is provided
-query = "Select * From QUANAN;"
+# Add a combo box to select rating
+rating = st.selectbox("Select Rating", ["All", 1, 2, 3, 4, 5], index=0)
+sort = st.selectbox("Sort", ["Sort","Sort by Restaurant Name DESC", "Sort by Restaurant Name ASC", "Sort by Address DESC", "Sort by Address ASC", "Sort by Address DESC", "Sort by Address ASC"], index=0)
+# Default query
+query = "SELECT * FROM QUANAN"
 
-# Update the query if a search query is entered
-if search_query:
-    query = f"Select * From QUANAN where tenquan like '%{search_query}%'"
+# Create a list to store conditions
+conditions = []
+
+# Track if the filter is changed (for resetting the page)
+filters_changed = False
+
+# Scenario 1: Search by Restaurant Name  (tenquan)
+if search_tenquan:
+    conditions.append(f"tenquan LIKE '%{search_tenquan}%'")
+    filters_changed = True
+
+# Scenario 2: Search by Address  (diachi)
+if search_diachi:
+    conditions.append(f"diachi LIKE '%{search_diachi}%'")
+    filters_changed = True
+
+# Scenario 3: Filter by Rating 
+if rating != "All":
+    conditions.append(f"rating >= {rating} AND rating < {rating + 1}")
+    filters_changed = True
+
+#Scenario 4: Filter by Sort
+# Sorting Logic
+if sort != "Sort":
+    if sort == "Sort by Restaurant Name DESC":
+        sort_query = "ORDER BY tenquan DESC"
+    elif sort == "Sort by Restaurant Name ASC":
+        sort_query = "ORDER BY tenquan ASC"
+    elif sort == "Sort by Address DESC":
+        sort_query = "ORDER BY diachi DESC"
+    elif sort == "Sort by Address ASC":
+        sort_query = "ORDER BY diachi ASC"
+    elif sort == "Sort by Rating DESC":
+        sort_query = "ORDER BY rating DESC"
+    elif sort == "Sort by Rating ASC":
+        sort_query = "ORDER BY rating ASC"
+    filters_changed = True
+else:
+    sort_query = ""
+
+
+# Combine conditions with 'AND' if there are any conditions
+if conditions:
+    query += " WHERE " + " AND ".join(conditions)
+query += f" {sort_query}"
+# Reset the page to the first page when filters change
+if filters_changed:
+    st.session_state.page = 0
 
 # Run Sqoop Eval command
 output = run_sqoop_eval(query)
+
 
 # Parse the output into a DataFrame
 if "Error" not in output:
@@ -117,7 +167,7 @@ if "Error" not in output:
         if st.session_state.page > 0:
             if st.button("Previous", key="prev"):
                 st.session_state.page -= 1
-                st.experimental_rerun()  # This will force a rerun to update the table immediately
+                st.rerun()  # This will force a rerun to update the table immediately
     with col2:
         st.write(f"Page {st.session_state.page + 1} of {total_pages}")
     with col3:
