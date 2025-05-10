@@ -1,7 +1,5 @@
 import subprocess
 import streamlit as st
-import pandas as pd
-from io import StringIO
 
 def run_sqoop_eval(query):
     command = [
@@ -40,24 +38,29 @@ def parse_sqoop_output(output):
     data = [line.split("|")[1:-1] for line in cleaned_lines]  # Skip the first and last empty fields
     
     header_values = ['id', 'tenquan', 'diachi', 'rating']
-    cleaned_data = []
+    
+    # Directly display each row with the corresponding data
     for row in data:
         cleaned_row = [cell.strip() for cell in row]
+        
         # Check if the row contains any valid data (i.e., no empty strings)
         if any(cell != '' for cell in cleaned_row) and cleaned_row != header_values:
-            cleaned_data.append(cleaned_row)
-    
-    # Define the column names
-    columns = ["ID", "Restaurant Name", "Address", "Rating"]
-    
-    # Create DataFrame
-    df = pd.DataFrame(cleaned_data, columns=columns)
-    
-    # Reset the index and drop the default index column
-    df = df.reset_index(drop=True)
-    
-    return df
+            col1, col2, col3, col4, col5 = st.columns([2, 1, 2, 1, 1])
 
+            with col1:
+                st.write(cleaned_row[0])  # ID
+            with col2:
+                st.write(cleaned_row[1])  # Restaurant Name
+            with col3:
+                st.write(cleaned_row[2])  # Address
+            with col4:
+                st.write(cleaned_row[3])  # Rating
+            with col5:
+                if st.button("Delete", key=f"delete_{cleaned_row[0]}"):
+                    query = f"DELETE FROM QUANAN WHERE id = {cleaned_row[0]};"
+                    out = run_sqoop_eval(query)
+                    st.rerun()
+    
 # Streamlit user interface
 st.title("Quan an")
 
@@ -67,7 +70,8 @@ search_diachi = st.text_input("Search by Address", "")
 
 # Add a combo box to select rating
 rating = st.selectbox("Select Rating", ["All", 1, 2, 3, 4, 5], index=0)
-sort = st.selectbox("Sort", ["Sort","Sort by Restaurant Name DESC", "Sort by Restaurant Name ASC", "Sort by Address DESC", "Sort by Address ASC", "Sort by Address DESC", "Sort by Address ASC"], index=0)
+sort = st.selectbox("Sort", ["Sort","Sort by Restaurant Name DESC", "Sort by Restaurant Name ASC", "Sort by Address DESC", "Sort by Address ASC", "Sort by Rating DESC", "Sort by Rating ASC"], index=0)
+
 # Default query
 query = "SELECT * FROM QUANAN"
 
@@ -92,7 +96,7 @@ if rating != "All":
     conditions.append(f"rating >= {rating} AND rating < {rating + 1}")
     filters_changed = True
 
-#Scenario 4: Filter by Sort
+# Scenario 4: Filter by Sort
 # Sorting Logic
 if sort != "Sort":
     if sort == "Sort by Restaurant Name DESC":
@@ -111,70 +115,17 @@ if sort != "Sort":
 else:
     sort_query = ""
 
-
 # Combine conditions with 'AND' if there are any conditions
 if conditions:
     query += " WHERE " + " AND ".join(conditions)
 query += f" {sort_query}"
-# Reset the page to the first page when filters change
-if filters_changed:
-    st.session_state.page = 0
 
 # Run Sqoop Eval command
 output = run_sqoop_eval(query)
 
-
-# Parse the output into a DataFrame
+# Display the output directly in Streamlit
 if "Error" not in output:
-    df = parse_sqoop_output(output)
-
-    # Define the number of rows per page
-    rows_per_page = 30
-    total_rows = len(df)
-    total_pages = (total_rows // rows_per_page) + (1 if total_rows % rows_per_page > 0 else 0)
-
-    # Initialize session state for page tracking if not already done
-    if "page" not in st.session_state:
-        st.session_state.page = 0
-
-    # Function to show the current page of data
-    def show_page(page_number):
-        start_row = page_number * rows_per_page
-        end_row = start_row + rows_per_page
-        return df[start_row:end_row]
-
-    # Display the current page of the DataFrame as HTML (without the index column)
-    page_data = show_page(st.session_state.page)
-    table_html = page_data.to_html(index=False, escape=False)
-    
-    # Add custom CSS to increase font size
-    custom_css = """
-    <style>
-        table {
-            font-size: 20px;
-        }
-    </style>
-    """
-    # Inject the CSS into Streamlit app
-    st.markdown(custom_css, unsafe_allow_html=True)
-    
-    # Display the table with the increased font size
-    st.write(table_html, unsafe_allow_html=True)
-
-    # Display navigation buttons and update the page state immediately after button press
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col1:
-        if st.session_state.page > 0:
-            if st.button("Previous", key="prev"):
-                st.session_state.page -= 1
-                st.rerun()  # This will force a rerun to update the table immediately
-    with col2:
-        st.write(f"Page {st.session_state.page + 1} of {total_pages}")
-    with col3:
-        if st.session_state.page < total_pages - 1:
-            if st.button("Next", key="next"):
-                st.session_state.page += 1
-                st.rerun()  # This will force a rerun to update the table immediately
+    parse_sqoop_output(output)
 else:
     st.error(output)
 
