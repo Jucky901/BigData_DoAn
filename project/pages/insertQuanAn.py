@@ -30,9 +30,6 @@ if btn_create:
     max_id_query = "SELECT MAX(id) AS max_id FROM QUANAN"
     max_id_output = run_sqoop_eval(max_id_query)
 
-    # DEBUG: Show the output from the max_id query
-    st.write("Max ID Query Output:", max_id_output)
-
     # Initialize max_id to 1 in case the table is empty or the query fails
     max_id = 1
 
@@ -53,9 +50,6 @@ if btn_create:
                 break  # Exit once we have the value
             except ValueError:
                 continue
-
-    # DEBUG: Show the determined max_id
-    st.write("Determined Max ID:", max_id)
 
     # Construct the insert query
     query = f"""

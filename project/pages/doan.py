@@ -107,7 +107,7 @@ if search_tenquan:
 
 # Scenario 3: Filter by Rating 
 if rating != "All":
-    conditions.append(f"rating >= {rating} AND rating < {rating + 1}")
+    conditions.append(f"DOAN.rating >= {rating} AND DOAN.rating < {rating + 1}")
     filters_changed = True
 
 #Scenario 4: Filter by Sort
