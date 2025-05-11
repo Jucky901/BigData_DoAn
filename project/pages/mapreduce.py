@@ -16,7 +16,7 @@ def run_hadoop_command(command):
         return f"Error: {e.stderr}"
 
 
-st.write("Day la trang cho mapreduce")
+st.write("Đây là trang dành các công việc mapreduce")
 
 tasks = [
     "Select Task", 
@@ -141,7 +141,6 @@ hdfs dfs -cat /user/hadoopnhom3/BigData/output/min_items_quan/part-00000")
         task = 10
     if query:
         output = run_hadoop_command(query)
-        st.text(output)
         if  task == 1:
             data = [re.split(r"\s*\|\s*", line.strip()) for line in output.split('\n') if '|' in line]
             df = pd.DataFrame(data, columns=['Food', 'Price'])

@@ -17,7 +17,7 @@ def run_sqoop_eval(query):
     except subprocess.CalledProcessError as e:
         return f"Error: {e.stderr}"
 
-st.title("Insert into DOAN")
+st.title("Thêm dữ liệu vào bảng đồ ăn")
 
 input_id = st.text_input("Insert your Restaurant ID here...")
 input_tenDoAn = st.text_input("Insert your Food Name here...")

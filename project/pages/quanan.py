@@ -64,7 +64,7 @@ def parse_sqoop_output(output):
                     st.rerun()
     
 # Streamlit user interface
-st.title("Quan an")
+st.title("Quán ăn")
 
 # Separate search bars for Restaurant Name and Address
 search_tenquan = st.text_input("Search by Restaurant Name", "")
