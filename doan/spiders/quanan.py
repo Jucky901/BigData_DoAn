@@ -11,8 +11,8 @@ class QuananSpider(scrapy.Spider):
     name = "quanan"
     allowed_domains = ["shopeefood.vn"]
     start_urls = ["https://shopeefood.vn/ho-chi-minh/food/deals"]
-    max_page = 5
-    id = 0
+    max_page = 10
+    id = 1
 
     def start_requests(self):
         url = "https://shopeefood.vn/ho-chi-minh/food/deals"

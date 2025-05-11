@@ -27,7 +27,7 @@ AUTOTHROTTLE_DEBUG = True  # Logs throttling stats
 # Scrapy-Selenium configuration
 SELENIUM_DRIVER_NAME = 'chrome'
 SELENIUM_DRIVER_EXECUTABLE_PATH = None  # Use webdriver-manager or set manually
-SELENIUM_DRIVER_ARGUMENTS = []
+SELENIUM_DRIVER_ARGUMENTS = ['--disable-gpu', '--window-size=1920x1080']
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapy_selenium.SeleniumMiddleware': 800,
