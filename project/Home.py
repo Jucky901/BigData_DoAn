@@ -1,4 +1,4 @@
 import streamlit as st
-st.title("Hello, Streamlit!")
-st.write("Welcome to my first app.")
+st.title("NHOM 3")
+st.write("Day la app cua nhom 3 bon em")
 
