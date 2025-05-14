@@ -220,7 +220,7 @@ hdfs dfs -cat /user/hadoopnhom3/BigData/output/min_items_quan/part-00000")
             data = [line.split("|") for line in lines]
             df = pd.DataFrame(data, columns=["ID_Quan", "GiaCaoNhat"])
             df["ID_Quan"] = df["ID_Quan"].astype(int)
-            df["GiaCaoNhat"] = df["GiaCaoNhat"].astype(int)
+            df["GiaCaoNhat"] = df["GiaCaoNhat"].astype(float)
             st.dataframe(df)
         if task == 7:
             lines = output.split('|')

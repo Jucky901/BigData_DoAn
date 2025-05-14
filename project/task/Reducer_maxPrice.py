@@ -22,12 +22,12 @@ for line in sys.stdin:
             max_item = item
     else:
         if current_id is not None:
-            print(f"{current_id}\t|\t{max_item}\t|\t{max_price}")
+            print(f"{current_id}\t|\t{max_price}")
         current_id = idquan
         max_price = price
         max_item = item
 
 # Output cuối cùng
 if current_id is not None:
-    print(f"{current_id}\t|\t{max_item}\t|\t{max_price}")
+    print(f"{current_id}\t|\t{max_price}")
 
