@@ -58,9 +58,9 @@ def parse_sqoop_output(output):
             with col5:
                 if st.button("Delete", key=f"delete_{cleaned_row[0]}"):
                     query = f"DELETE FROM QUANAN WHERE id = {cleaned_row[0]};"
-                    query2 = f"DELETE FROM DOAN WHERE id = {cleaned_row[0]};"
+                    query2 = f"DELETE FROM DOAN WHERE idquan = {cleaned_row[0]};"
                     out = run_sqoop_eval(query2)
-                    out = run_sqoop_eval(query1)
+                    out = run_sqoop_eval(query)
                     st.rerun()
     
 # Streamlit user interface
