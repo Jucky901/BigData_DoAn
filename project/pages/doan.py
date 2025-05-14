@@ -85,7 +85,7 @@ search_tendoan = st.text_input("Search by Food Name", "")
 
 # Add a combo box to select rating
 rating = st.selectbox("Select Rating", ["All", 1, 2, 3, 4, 5], index=0)
-price = st.selectbox("Select Price", ["All", "Tu 50k tro xuong", "Tu 50k den 100k", "Tu 100k den 200k", "Tu 200k den 500k, Tu 500k tro len"], index=0)
+price = st.selectbox("Select Price", ["All", "Tu 50k tro xuong", "Tu 50k den 100k", "Tu 100k den 200k", "Tu 200k den 500k", "Tu 500k tro len"], index=0)
 sort = st.selectbox("Sort", ["Sort","Sort by Restaurant Name DESC", "Sort by Restaurant Name ASC", "Sort by Item DESC", "Sort by Item ASC", "Sort by Price DESC", "Sort by Price ASC"], index=0)
 # Default query
 query = "Select tenquan, id ,DOAN.rating, item, price  From DOAN left join QUANAN on DOAN.idquan = QUANAN.id"
