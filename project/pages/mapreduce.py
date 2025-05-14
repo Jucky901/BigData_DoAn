@@ -38,7 +38,7 @@ if congviec != "Select Task":
     task = 0
     query = ""
     if congviec == "10 do an co gia cao nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/doan_top10_maxPrice && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/doan_top10_maxPrice || true && \
         hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
         -files /home/hadoopnhom3/BigData_DoAn/project/task/MapperDoAnMaxPrice.py,/home/hadoopnhom3/BigData_DoAn/project/task/ReducerDoAnMaxPrice.py \
         -mapper /home/hadoopnhom3/BigData_DoAn/project/task/MapperDoAnMaxPrice.py \
@@ -49,7 +49,7 @@ if congviec != "Select Task":
         task = 1
 
     elif congviec == "10 do an co gia thap nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/doan_top10_minPrice && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/doan_top10_minPrice || true && \
         hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
         -files /home/hadoopnhom3/BigData_DoAn/project/task/MapperDoAnMinPrice.py,/home/hadoopnhom3/BigData_DoAn/project/task/ReducerDoAnMinPrice.py \
         -mapper /home/hadoopnhom3/BigData_DoAn/project/task/MapperDoAnMinPrice.py \
@@ -60,7 +60,7 @@ if congviec != "Select Task":
         task = 2
 
     elif congviec == "10 quan an co danh gia cao nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/quanan_top10_maxRating && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/quanan_top10_maxRating || true && \
         hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
         -files /home/hadoopnhom3/BigData_DoAn/project/task/MapperQuanAnMaxRating.py,/home/hadoopnhom3/BigData_DoAn/project/task/ReducerQuanAnMaxRating.py \
         -mapper /home/hadoopnhom3/BigData_DoAn/project/task/MapperQuanAnMaxRating.py \
@@ -70,7 +70,7 @@ if congviec != "Select Task":
         hdfs dfs -cat /user/hadoopnhom3/BigData/output/quanan_top10_maxRating/part-00000")
         task = 3
     elif congviec == "Trung binh gia cac mon an trong quan":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/avg_price_per_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/avg_price_per_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -files /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_AvgPrice.py,/home/hadoopnhom3/BigData_DoAn/project/task/Reducer_AvgPrice.py \
 -mapper /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_AvgPrice.py  \
@@ -80,7 +80,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/avg_price_per_quan/part-00000")
         task = 4
     elif congviec == "So luong mon an trong moi quan":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/count_items_per_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/count_items_per_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -files /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_count.py,/home/hadoopnhom3/BigData_DoAn/project/task/Reducer_count.py \
 -mapper /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_count.py  \
@@ -90,7 +90,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/count_items_per_quan/part-00000")
         task = 5
     elif congviec == "Mon an gia cao nhat moi quan":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_price_per_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_price_per_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -files /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_maxPrice.py,/home/hadoopnhom3/BigData_DoAn/project/task/Reducer_maxPrice.py \
 -mapper /home/hadoopnhom3/BigData_DoAn/project/task/Mapper_maxPrice.py  \
@@ -100,7 +100,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/max_price_per_quan/part-00000")
         task = 6
     elif congviec == "Quan an gia trung binh cao nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_avg_price_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_avg_price_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -input /user/hadoopnhom3/BigData/output/avg_price_per_quan \
 -output /user/hadoopnhom3/BigData/output/max_avg_price_quan \
@@ -110,7 +110,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/max_avg_price_quan/part-00000")
         task = 7
     elif congviec == "Quan an gia trung binh thap nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/min_avg_price_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/min_avg_price_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -input /user/hadoopnhom3/BigData/output/avg_price_per_quan \
 -output /user/hadoopnhom3/BigData/output/min_avg_price_quan \
@@ -120,7 +120,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/min_avg_price_quan/part-00000")
         task = 8
     elif congviec == "Quan an co so luong mon an nhieu nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_items_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/max_items_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -input /user/hadoopnhom3/BigData/output/count_items_per_quan \
 -output /user/hadoopnhom3/BigData/output/max_items_quan \
@@ -130,7 +130,7 @@ hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.
 hdfs dfs -cat /user/hadoopnhom3/BigData/output/max_items_quan/part-00000")
         task = 9
     elif congviec == "Quan an co so luong mon an it nhat":
-        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/min_items_quan && \
+        query = ("hdfs dfs -rm -r /user/hadoopnhom3/BigData/output/min_items_quan || true && \
 hadoop jar /home/hadoopnhom3/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.4.jar \
 -input /user/hadoopnhom3/BigData/output/count_items_per_quan \
 -output /user/hadoopnhom3/BigData/output/min_items_quan \
